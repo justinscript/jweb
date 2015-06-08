@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.fengduo</groupId>
+        <artifactId>spark-framework</artifactId>
+        <version>1.0.0</version>
+    </parent>
+    <artifactId>spark-service</artifactId>
+    <packaging>jar</packaging>
+    <name>${project.artifactId}</name>
+    <description>The spark-service module of spark-framework project</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.fengduo</groupId>
+            <artifactId>spark-data</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>*.properties</include>
+                </includes>
+                <filtering>true</filtering>
+                <targetPath>.</targetPath>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <excludes>
+                    <exclude>*.properties</exclude>
+                </excludes>
+                <includes>
+                    <include>**</include>
+                </includes>
+                <filtering>false</filtering>
+            </resource>
+        </resources>
+    </build>
+</project>

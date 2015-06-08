@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.fengduo</groupId>
+        <artifactId>spark-framework</artifactId>
+        <version>1.0.0</version>
+    </parent>
+    <artifactId>spark-web</artifactId>
+    <packaging>war</packaging>
+    <name>${project.artifactId}</name>
+    <description>The spark-web module of spark-framework project</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.fengduo</groupId>
+            <artifactId>spark-service</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+    </dependencies>
+    
+    <build>
+        <finalName>spark</finalName>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>*.properties</include>
+                </includes>
+                <filtering>true</filtering>
+                <targetPath>.</targetPath>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <excludes>
+                    <exclude>*.properties</exclude>
+                </excludes>
+                <includes>
+                    <include>**</include>
+                </includes>
+                <filtering>false</filtering>
+            </resource>
+        </resources>
+        <pluginManagement>  
+            <plugins>  
+                    <plugin> 
+                     <artifactId>maven-compiler-plugin</artifactId>  
+                    <configuration>  
+                        <encoding>UTF-8</encoding>  
+                        <compilerArguments>  
+                            <verbose />  
+                            <bootclasspath>${java.home}/lib/rt.jar</bootclasspath>  
+                        </compilerArguments>  
+                    </configuration>  
+                	</plugin>  
+            </plugins>
+        </pluginManagement>
+    </build>
+    <!--
+    <build>
+    <finalName>spark</finalName>
+    <pluginManagement>
+          <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                    <encoding>UTF-8</encoding>
+                    <compilerArguments>
+                        <extdirs>src/main/webapp/WEB-INF/lib</extdirs>
+                    </compilerArguments>
+                </configuration>
+            </plugin>
+             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.4</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <testFailureIgnore>true</testFailureIgnore>
+                </configuration>
+            </plugin>
+            <plugin>
+              <groupId>org.apache.tomcat.maven</groupId>
+              <artifactId>tomcat7-maven-plugin</artifactId>
+              <version>2.1</version>
+            </plugin>
+          </plugins>
+     </pluginManagement>
+  </build>
+  -->
+</project>

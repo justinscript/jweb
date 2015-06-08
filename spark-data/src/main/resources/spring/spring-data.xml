@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" 
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xsi:schemaLocation="
+            http://www.springframework.org/schema/beans 
+            http://www.springframework.org/schema/beans/spring-beans-4.0.xsd 
+			http://www.springframework.org/schema/aop 
+			http://www.springframework.org/schema/aop/spring-aop-4.0.xsd 
+			http://www.springframework.org/schema/context 
+			http://www.springframework.org/schema/context/spring-context-4.0.xsd 
+			http://www.springframework.org/schema/jee 
+			http://www.springframework.org/schema/jee/spring-jee-4.0.xsd 
+			http://www.springframework.org/schema/tx 
+			http://www.springframework.org/schema/tx/spring-tx-4.0.xsd 
+			http://www.springframework.org/schema/util 
+			http://www.springframework.org/schema/util/spring-util-4.0.xsd
+			http://www.springframework.org/schema/jdbc 
+			http://www.springframework.org/schema/jdbc/spring-jdbc-4.0.xsd"
+			default-lazy-init="true">
+
+	<description>Spring数据配置</description>
+
+	<!-- 数据库配置文件 -->
+	<context:property-placeholder location="classpath*:/datasource.properties"  ignore-unresolvable="true" />
+	
+	<!-- 数据源配置, 使用 BoneCP 数据库连接池 -->
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close" scope="singleton" lazy-init="true"> 
+	    <!-- 数据源驱动类可不写，Druid默认会自动根据URL识别DriverClass -->
+	    <property name="driverClassName" value="${jdbc.driver}" />
+		<!-- 基本属性 url、user、password -->
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<!-- 配置初始化大小、最小、最大 -->
+		<property name="initialSize" value="${jdbc.initialSize}" />
+		<property name="minIdle" value="0" /> 
+		<property name="maxActive" value="5" />
+		<!-- 配置获取连接等待超时的时间 -->
+		<property name="maxWait" value="60000" />
+		<!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+		<property name="timeBetweenEvictionRunsMillis" value="60000" />
+		<!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+		<property name="minEvictableIdleTimeMillis" value="300000" />
+		
+		<property name="validationQuery" value="select 1" />
+		<property name="testWhileIdle" value="true" />
+		<property name="testOnBorrow" value="false" />
+		<property name="testOnReturn" value="false" />
+		<!-- 打开PSCache，并且指定每个连接上PSCache的大小（Oracle使用）
+		<property name="poolPreparedStatements" value="true" />
+		<property name="maxPoolPreparedStatementPerConnectionSize" value="20" /> -->
+		<!-- 配置监控统计拦截的filters -->
+	    <property name="filters" value="stat" /> 
+	</bean>
+	
+	<!-- MyBatis配置 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<!-- 自动扫描entity目录, 省掉Configuration.xml里的手工配置 -->
+		<property name="typeAliasesPackage" value="com.fengduo.spark.model.entity" />
+		<!-- 显式指定Mapper文件位置 -->
+		<property name="mapperLocations">
+			<list>
+				<value>classpath*:/mybatis/mapper/*.xml</value>
+				<value>classpath*:/mybatis/pagination/*.xml</value>
+			</list>
+		</property>
+		<!-- <property name="mapperLocations" value="classpath*:/mybatis/*Mapper.xml" /> -->
+		<property name="configLocation" value="classpath:/mybatis/mybatis-config.xml" />
+	</bean>
+	<!-- 扫描basePackage下所有以@MyBatisRepository标识的 接口-->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.fengduo.spark.data.dao" />
+		<property name="annotationClass" value="com.fengduo.spark.commons.persistence.annotation.MyBatisRepository"/>
+	</bean>
+	
+	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate" scope="prototype">  
+        <constructor-arg index="0" ref="sqlSessionFactory" />
+		<constructor-arg index="1" value="BATCH" /> 
+    </bean>
+	
+</beans>

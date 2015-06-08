@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+						http://www.springframework.org/schema/beans/spring-beans-4.0.xsd"
+						default-lazy-init="true">
+
+	<description>Shiro安全配置</description>
+
+	<!-- Shiro's main business-tier object for web-enabled applications 定义Shiro安全管理配置-->
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<property name="realm" ref="shiroDbRealm" />
+		<property name="cacheManager" ref="shiroEhcacheManager" />
+		<!-- <property name="sessionManager" ref="sessionManager" />  -->
+	</bean>
+	
+	<!-- 項目自定义的Realm, 所有accountService依赖的dao都需要用depends-on声明 -->
+	<bean id="shiroDbRealm" class="com.fengduo.spark.service.impl.account.ShiroDbRealm">
+		<property name="accountService" ref="accountServiceImpl"/> 
+	</bean>
+	
+	<!-- Shiro权限过滤过滤器定义 -->
+	<bean name="shiroFilterChainDefinitions" class="java.lang.String">
+		<constructor-arg>
+			<value>
+				/login = authc
+				/logout = logout
+				/static/** = anon
+				/api/** = anon
+				/register/** = anon
+				/druid/** = anon
+				/validate/code = anon
+				/help = anon
+				
+				/admin/** = roles[admin]
+				/** = user
+			</value>
+		</constructor-arg>
+	</bean>
+	
+	<!-- Shiro Filter 安全认证过滤器 -->
+	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<property name="securityManager" ref="securityManager" />
+		<property name="loginUrl" value="/login" />
+		<property name="successUrl" value="/" />
+		<property name="filterChainDefinitions">
+			<ref bean="shiroFilterChainDefinitions"/>
+		</property>
+	</bean>
+	
+	<!-- CAS认证过滤器 -->  
+	<!--
+	<bean id="casFilter" class="org.apache.shiro.cas.CasFilter">  
+		<property name="failureUrl" value="/admin/login"/>
+	</bean> -->
+	
+	<!-- 自定义会话管理配置 -->
+	<!-- <bean id="sessionManager" class="com.fengduo.spark.common.security.shiro.session.SessionManager"> 
+		<property name="sessionDAO" ref="sessionDAO"/>
+		会话超时时间，单位：毫秒 
+		<property name="globalSessionTimeout" value="${session.sessionTimeout}"/>
+		定时清理失效会话, 清理用户直接关闭浏览器造成的孤立会话  
+		<property name="sessionValidationInterval" value="${session.sessionTimeoutClean}"/>
+		<property name="sessionValidationSchedulerEnabled" value="false"/>
+ 		<property name="sessionValidationSchedulerEnabled" value="true"/>
+		<property name="sessionIdCookie" ref="sessionIdCookie"/>
+		<property name="sessionIdCookieEnabled" value="true"/>
+	</bean> -->
+	
+	<!-- 指定本系统SESSIONID, 默认为: JSESSIONID 问题: 与SERVLET容器名冲突, 如JETTY, TOMCAT 等默认JSESSIONID,
+		当跳出SHIRO SERVLET时如ERROR-PAGE容器会为JSESSIONID重新分配值导致登录会话丢失! -->
+	<!-- <bean id="sessionIdCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
+	    <constructor-arg name="name" value="spark.session.id"/>
+	</bean> -->
+	
+	<!-- 自定义Session存储容器 -->
+	<!-- <bean id="sessionDAO" class="com.fengduo.spark.common.security.shiro.session.JedisSessionDAO"> 
+		<property name="sessionIdGenerator" ref="idGen" /> 
+		<property name="sessionKeyPrefix" value="${redis.keyPrefix}_session_" /> 
+	</bean> -->
+	<!-- <bean id="sessionDAO" class="com.fengduo.spark.common.security.shiro.session.CacheSessionDAO">
+		<property name="sessionIdGenerator" ref="idGen" />
+		<property name="activeSessionsCacheName" value="activeSessionsCache" />
+		<property name="cacheManager" ref="shiroCacheManager" />
+	</bean> -->
+	
+	<!-- 定义授权缓存管理器 用户授权信息Cache, 采用EhCache -->
+	<bean id="shiroEhcacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+		<property name="cacheManagerConfigFile" value="classpath:cache/ehcache-shiro.xml"/>
+	</bean>
+	
+	<!-- 保证实现了Shiro内部lifecycle函数的bean执行 -->
+	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+</beans>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" 
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xsi:schemaLocation="
+            http://www.springframework.org/schema/beans 
+            http://www.springframework.org/schema/beans/spring-beans-4.0.xsd 
+			http://www.springframework.org/schema/aop 
+			http://www.springframework.org/schema/aop/spring-aop-4.0.xsd 
+			http://www.springframework.org/schema/context 
+			http://www.springframework.org/schema/context/spring-context-4.0.xsd 
+			http://www.springframework.org/schema/jee 
+			http://www.springframework.org/schema/jee/spring-jee-4.0.xsd 
+			http://www.springframework.org/schema/tx 
+			http://www.springframework.org/schema/tx/spring-tx-4.0.xsd 
+			http://www.springframework.org/schema/util 
+			http://www.springframework.org/schema/util/spring-util-4.0.xsd
+			http://www.springframework.org/schema/jdbc 
+			http://www.springframework.org/schema/jdbc/spring-jdbc-4.0.xsd"
+			default-lazy-init="true">
+
+	<description>Spring事务配置</description>
+
+	<!-- 使用annotation定义事务 -->
+	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
+	
+	<!-- 定义aspectj -->
+	<aop:aspectj-autoproxy proxy-target-class="true"/>
+
+  	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+		
+	<bean id="serviceExceptionCatcher" 		class="com.fengduo.spark.commons.exception.ServiceExceptionCatcher"></bean>
+	
+	<aop:config>
+		<aop:pointcut id="entryPointMethod"	expression="execution(* *..service.*..*Service*.*(..))" />
+		<aop:advisor pointcut-ref="entryPointMethod" advice-ref="txAdvice" />
+		<aop:aspect id="afterThrowing" ref="serviceExceptionCatcher">
+			<aop:after-throwing pointcut-ref="entryPointMethod"	method="log" throwing="exception" />
+		</aop:aspect>
+	</aop:config>
+
+	<tx:advice id="txAdvice" transaction-manager="txManager">
+		<tx:attributes>
+			<tx:method name="import*" 			rollback-for="java.lang.Throwable" />
+			<tx:method name="upload*"			rollback-for="java.lang.Throwable" />
+			<tx:method name="insert*"			rollback-for="java.lang.Throwable" />
+			<tx:method name="add*"				rollback-for="java.lang.Throwable" />
+			<tx:method name="save*" 			rollback-for="java.lang.Throwable" />
+			<tx:method name="delete*" 			rollback-for="java.lang.Throwable" />
+			<tx:method name="update*" 			rollback-for="java.lang.Throwable" />
+			<tx:method name="modify*" 			rollback-for="java.lang.Throwable" />
+			<tx:method name="do*" 				rollback-for="java.lang.Throwable" />
+			<tx:method name="batch*" 			rollback-for="java.lang.Throwable" />
+			<tx:method name="transaction*" 		rollback-for="java.lang.Throwable" />
+			<tx:method name="get*" 				read-only="true" />
+			<tx:method name="list*" 			read-only="true" />
+			<tx:method name="find*" 			read-only="true" />
+			<tx:method name="show*" 			read-only="true" />
+		</tx:attributes>
+	</tx:advice>
+	
+</beans>
