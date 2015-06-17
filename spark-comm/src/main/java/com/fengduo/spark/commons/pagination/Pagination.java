@@ -1,7 +1,7 @@
 /*
- * Copyright 2015-2020 MSUN.com Alimport java.util.ArrayList; import java.util.List; and proprietary information of
- * MSUN.com ("Confidential Information"). You shall not disclose such Confidential Information and shall use it only
- * in accordance with the terms of the license agreement you entered into with MSUN.com.
+ * Copyright 2015-2020 MSUN.comm Alimport java.util.ArrayList; import java.util.List; and proprietary information of
+ * MSUN.comm ("Confidential Information"). You shall not disclose such Confidential Information and shall use it only
+ * in accordance with the terms of the license agreement you entered into with MSUN.comm.
  */
 package com.fengduo.spark.commons.pagination;
 
