@@ -1,4 +1,4 @@
-# Spark-Framework Java Web项目基础框架
+# jweb基础框架
 
 ## 搭建初衷
 
@@ -10,20 +10,20 @@
 
 ## 框架简介
 
-Spark-Framework是基于多个优秀的开源项目，高度整合封装而成的高效，高性能，高安全性的**开源**Java EE快速开发平台。
+jweb-Framework是基于多个优秀的开源项目，高度整合封装而成的高效，高性能，高安全性的**开源**Java EE快速开发平台。
 
-Spark-Framework本身是以Spring Framework为核心容器，Spring MVC为模型视图控制器，MyBatis为数据访问层，
+jweb-Framework本身是以Spring Framework为核心容器，Spring MVC为模型视图控制器，MyBatis为数据访问层，
 Apache Shiro为权限授权层，Ehcahe对常用数据进行缓存。
 
 采用分层设计、双重验证、提交数据安全编码、密码加密、访问验证、数据权限验证。
 使用Maven做项目管理，提高项目的易开发性、扩展性。
 前端界面风格初步引入了结构简单、性能优良、容易上手的Twitter Bootstrap页面展示框架。
 
-Spark-Framework 提供了常用工具的封装，包括日志工具、缓存工具、服务器端验证、数据字典、当前组登录用户数据
+jweb-Framework 提供了常用工具的封装，包括日志工具、缓存工具、服务器端验证、数据字典、当前组登录用户数据
 （用户、角色、权限）以及其它常用小工具等。
-如果你使用了Spark-Framework基础框架，就可以很高效的快速开发出，优秀的互联网产品。
+如果你使用了jweb-Framework基础框架，就可以很高效的快速开发出，优秀的互联网产品。
 
-## 为何选择Spark-Framework
+## 为何选择jweb-Framework
 
 1. 使用 [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0) 协议，源代码闭源。
 2. 使用目前主流的Java EE开发框架，简单易学，学习成本低。
@@ -143,6 +143,6 @@ Hibernate性能上定不是问题。但对于大多数情况下，真正掌握Hi
 4. 如果再发布的产品中包含一个Notice文件，则在Notice文件中需要带有Apache Licence。你可以在Notice中增加自己的许可，但不可以表现为对Apache Licence构成更改。
 3. Apache Licence也是对商业应用友好的许可。使用者也可以在需要的时候修改代码来满足需要并作为开源或商业产品发布/销售
 
-## Spark-Framework框架示例
+## jweb-Framework框架示例
 
 [TodoList应用演示](http://fengduo.co:39999/spark/)(包括用户登录注册,任务创建查看等操作,仅作示范)
