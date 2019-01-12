@@ -28,7 +28,7 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 /**
  * 条形码和二维码编码解码
  * 
- * @author zxc Jun 4, 2015 12:39:19 PM
+ * @author luckscript Jun 4, 2015 12:39:19 PM
  */
 public class ZxingHandler {
 
@@ -150,8 +150,8 @@ public class ZxingHandler {
 
         // 二维码
         String imgPath2 = "target\\zxing.png";
-        String contents2 = "Hello Gem, welcome to Zxing!" + "\nBlog [ http://lawrence-zxc.github.io/ ]"
-                           + "\nEMail [ zhangxiongcai337@163.com ]";
+        String contents2 = "Hello Gem, welcome to Zxing!" + "\nBlog [ http://www.msun.com/ ]"
+                           + "\nEMail [ luckscript@163.com ]";
         int width2 = 300, height2 = 300;
 
         ZxingHandler.encode2(contents2, width2, height2, imgPath2);
